@@ -227,7 +227,17 @@ export function runAction(action: GenseoAction): GenSeoSnapshot {
       addJob(action.projectId, "seo_score", "completed", "SEO score refreshed.");
       break;
     case "scanInternalLinks":
-      state.internalLinks = scanInternalLinks(action.projectId, state.articles);
+      state.internalLinks = [
+        ...state.internalLinks.filter(
+          (link) => link.projectId !== action.projectId,
+        ),
+        ...scanInternalLinks(
+          action.projectId,
+          state.articles.filter(
+            (article) => article.projectId === action.projectId,
+          ),
+        ),
+      ];
       addJob(
         action.projectId,
         "internal_link_scan",
@@ -388,16 +398,24 @@ function refreshProjectReadiness(projectId: string) {
   const hasSync = state.articles.some(
     (article) => article.projectId === projectId && article.syncStatus === "synced",
   );
-  const readinessScore =
-    [hasActiveKey, hasKnowledge, hasPlan, hasReadyArticle, hasLinkScan, hasSync]
-      .filter(Boolean).length * 16;
+  const readinessCriteria = [
+    hasActiveKey,
+    hasKnowledge,
+    hasPlan,
+    hasReadyArticle,
+    hasLinkScan,
+    hasSync,
+  ];
+  const readinessScore = Math.round(
+    (readinessCriteria.filter(Boolean).length / readinessCriteria.length) * 100,
+  );
 
   state.projects = state.projects.map((project) =>
     project.id === projectId
       ? {
           ...project,
-          readinessScore: Math.min(100, readinessScore),
-          status: readinessScore >= 96 ? "ready" : "processing",
+          readinessScore,
+          status: readinessScore === 100 ? "ready" : "processing",
         }
       : project,
   );

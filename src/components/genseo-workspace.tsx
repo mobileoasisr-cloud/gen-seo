@@ -740,12 +740,17 @@ function RuleBadge({ result }: { result: SeoRuleResult }) {
 function StatusPill({ status }: { status: string }) {
   const normalized = status.replaceAll("_", " ");
   const isReady =
-    status === "ready" || status === "active" || status === "processed" || status === "completed" || status === "synced";
+    status === "ready" ||
+    status === "active" ||
+    status === "processed" ||
+    status === "completed" ||
+    status === "synced";
   const isWarning =
     status === "processing" ||
     status === "queued" ||
     status === "seo_review" ||
-    status === "rate_limited";
+    status === "rate_limited" ||
+    status === "needs_attention";
   const className = isReady
     ? "bg-emerald-300/15 text-emerald-200"
     : isWarning
