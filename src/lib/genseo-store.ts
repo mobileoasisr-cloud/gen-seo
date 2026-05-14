@@ -59,7 +59,7 @@ const initialState: GenSeoState = {
       fileName: "seo-operating-system.txt",
       fileType: "txt",
       status: "processed",
-      chunkCount: 4,
+      chunkCount: 3,
       summary:
         "GenSEO combines keyword clustering, RAG content generation, SEO scoring, internal linking, and WordPress publishing.",
       createdAt: "2026-05-14T00:03:00.000Z",

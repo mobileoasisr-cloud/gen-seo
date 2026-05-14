@@ -69,6 +69,8 @@ export function GenSeoWorkspace({
       }
       const data = (await response.json()) as GenSeoSnapshot;
       setSnapshot(data);
+    } catch {
+      setError("Action failed. Check the API route and try again.");
     } finally {
       setIsMutating(false);
     }
