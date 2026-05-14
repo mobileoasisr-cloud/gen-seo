@@ -749,6 +749,7 @@ function StatusPill({ status }: { status: string }) {
     status === "synced";
   const isWarning =
     status === "processing" ||
+    status === "running" ||
     status === "queued" ||
     status === "seo_review" ||
     status === "rate_limited" ||
