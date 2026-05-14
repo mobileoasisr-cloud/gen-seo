@@ -223,8 +223,11 @@ export function runAction(action: GenseoAction): GenSeoSnapshot {
       generateArticle(action.projectId, action.clusterId);
       break;
     case "scoreArticle":
-      updateArticle(action.articleId, (article) => scoreArticle(article));
-      addJob(action.projectId, "seo_score", "completed", "SEO score refreshed.");
+      if (updateArticle(action.articleId, (article) => scoreArticle(article))) {
+        addJob(action.projectId, "seo_score", "completed", "SEO score refreshed.");
+      } else {
+        addJob(action.projectId, "seo_score", "failed", "Article not found.");
+      }
       break;
     case "scanInternalLinks":
       state.internalLinks = [
@@ -246,13 +249,20 @@ export function runAction(action: GenseoAction): GenSeoSnapshot {
       );
       break;
     case "syncWordPress":
-      updateArticle(action.articleId, (article) => syncArticleToWordPress(article));
-      addJob(
-        action.projectId,
-        "wordpress_sync",
-        "completed",
-        "Article synced as a WordPress draft.",
-      );
+      if (
+        updateArticle(action.articleId, (article) =>
+          syncArticleToWordPress(article),
+        )
+      ) {
+        addJob(
+          action.projectId,
+          "wordpress_sync",
+          "completed",
+          "Article synced as a WordPress draft.",
+        );
+      } else {
+        addJob(action.projectId, "wordpress_sync", "failed", "Article not found.");
+      }
       break;
   }
 
@@ -360,9 +370,15 @@ function updateArticle(
   articleId: string,
   update: (article: Article) => Article,
 ) {
-  state.articles = state.articles.map((article) =>
-    article.id === articleId ? update(article) : article,
-  );
+  let didUpdate = false;
+  state.articles = state.articles.map((article) => {
+    if (article.id !== articleId) {
+      return article;
+    }
+    didUpdate = true;
+    return update(article);
+  });
+  return didUpdate;
 }
 
 function addJob(
