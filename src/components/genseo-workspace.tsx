@@ -86,6 +86,8 @@ const navItems: {
   },
 ];
 
+let workspaceSnapshotCache: GenSeoSnapshot | null = null;
+
 export function GenSeoWorkspace({
   initialSnapshot,
   page = "dashboard",
@@ -93,7 +95,9 @@ export function GenSeoWorkspace({
   initialSnapshot: GenSeoSnapshot;
   page?: WorkspacePage;
 }) {
-  const [snapshot, setSnapshot] = useState<GenSeoSnapshot>(initialSnapshot);
+  const [snapshot, setSnapshot] = useState<GenSeoSnapshot>(
+    workspaceSnapshotCache ?? initialSnapshot,
+  );
   const [seedKeyword, setSeedKeyword] = useState("AI SEO automation");
   const [fileName, setFileName] = useState("brand-guidelines.txt");
   const [knowledgeContent, setKnowledgeContent] = useState(
@@ -133,6 +137,7 @@ export function GenSeoWorkspace({
         return;
       }
       const data = (await response.json()) as GenSeoSnapshot;
+      workspaceSnapshotCache = data;
       setSnapshot(data);
     } catch {
       setError("Action failed. Check the API route and try again.");
