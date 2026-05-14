@@ -6,6 +6,8 @@ simulated service workflows for the main SEO operations loop.
 
 ## MVP scope
 
+- Route-based workspace pages so each core function has a focused screen instead
+  of a crowded one-page dashboard.
 - Project readiness dashboard for API keys, WordPress, Knowledge Base, keyword
   planning, articles, internal linking, and sync status.
 - API key rotation workflow with provider priority and quota states.
@@ -47,7 +49,19 @@ Run the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the dashboard.
+
+## Workspace pages
+
+- `/` — dashboard overview, readiness, KPIs, and module shortcuts.
+- `/projects` — active project profile and setup checklist.
+- `/api-keys` — provider key priority, status, and rotation action.
+- `/knowledge-base` — document import, chunking, and retrieved RAG context.
+- `/keyword-plan` — Pillar–Cluster generation from a seed keyword.
+- `/articles` — AI draft generation, SEO rule checks, and publish actions.
+- `/internal-links` — contextual anchor suggestions and confidence scores.
+- `/wordpress` — latest article WordPress draft sync status.
+- `/jobs` — background workflow timeline.
 
 ## Quality checks
 
@@ -78,8 +92,11 @@ Supported action types:
 
 ## Project structure
 
-- `src/app/page.tsx` — workspace entrypoint.
-- `src/components/genseo-workspace.tsx` — interactive dashboard UI.
+- `src/app/page.tsx` — dashboard workspace entrypoint.
+- `src/app/*/page.tsx` — focused feature pages for projects, API keys,
+  Knowledge Base, keyword plans, articles, internal links, WordPress, and jobs.
+- `src/components/genseo-workspace.tsx` — shared interactive workspace shell and
+  route-specific module UI.
 - `src/app/api/genseo/route.ts` — local API route for snapshots and actions.
 - `src/lib/genseo-types.ts` — domain types.
 - `src/lib/genseo-store.ts` — seeded in-memory store and workflow mutations.
