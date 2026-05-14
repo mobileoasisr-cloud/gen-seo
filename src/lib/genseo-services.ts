@@ -255,6 +255,7 @@ function retrieveRelevantChunks(
         keywordSet.has(keyword.toLowerCase()),
       ).length,
     }))
+    .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
     .map(({ chunk }) => chunk)
     .slice(0, 3);
