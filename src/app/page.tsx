@@ -167,7 +167,7 @@ export default function Home() {
           </div>
         </Panel>
 
-        <Panel eyebrow="Knowledge Base" title="RAG document pipeline">
+        <Panel eyebrow="Knowledge Base" id="rag" title="RAG document pipeline">
           <div className="space-y-4">
             {ragPipeline.map((stage, index) => (
               <div className="flex gap-4" key={stage.title}>
@@ -326,14 +326,19 @@ export default function Home() {
 function Panel({
   children,
   eyebrow,
+  id,
   title,
 }: Readonly<{
   children: React.ReactNode;
   eyebrow: string;
+  id?: string;
   title: string;
 }>) {
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-slate-950/20">
+    <div
+      className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-slate-950/20"
+      id={id}
+    >
       <p className="text-sm font-bold uppercase tracking-[0.24em] text-emerald-200">
         {eyebrow}
       </p>
